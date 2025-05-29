@@ -53,22 +53,35 @@ if start_download:
     os.makedirs(save_base_dir, exist_ok=True)
     st.write("🚀 開始下載...")
     error_list = []
+	
+	# 產生 header
+	try:
+		ua = UserAgent()
+		user_agent = ua.chrome
+	except:
+		user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
-    # 產生 header
-    ua = UserAgent()
-    headers = {
-        'User-Agent': ua.chrome
-    }
+	headers = {
+		'User-Agent': user_agent
+	}
+	options.add_argument(f"user-agent={user_agent}")
 
     # 設定瀏覽器
     options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--headless")
-    options.add_argument("--incognito")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option("useAutomationExtension", False)
-    options.add_argument(f"user-agent={headers['User-Agent']}")
+	options.add_argument("--disable-gpu")
+	options.add_argument("--no-sandbox")
+	options.add_argument("--headless")
+	options.add_argument("--incognito")
+	options.add_argument("--disable-dev-shm-usage")
+	options.add_argument("--disable-extensions")
+	options.add_experimental_option("excludeSwitches", ["enable-automation"])
+	options.add_experimental_option("useAutomationExtension", False)
+	options.add_argument(f"user-agent={headers['User-Agent']}")
+
+	from shutil import which
+	chrome_path = which("chromium-browser") or which("chromium")
+	if chrome_path:
+		options.binary_location = chrome_path
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
