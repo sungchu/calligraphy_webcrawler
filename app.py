@@ -53,8 +53,6 @@ if start_download:
     os.makedirs(save_base_dir, exist_ok=True)
     st.write("🚀 開始下載...")
     error_list = []
-	
-	# 產生 header
 	try:
 		ua = UserAgent()
 		user_agent = ua.chrome
