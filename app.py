@@ -80,15 +80,10 @@ if start_download:
 	chrome_path = which("chromium-browser") or which("chromium")
 	if chrome_path:
 		options.binary_location = chrome_path
-
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": """
-            Object.defineProperty(navigator, 'webdriver', {
-              get: () => undefined
-            })
-        """
-    })
+	
+	driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+	driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", 
+	{"source": """Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"""})
 
     base_url = "https://www.shufazidian.com/s.php"
 
