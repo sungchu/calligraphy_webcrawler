@@ -84,53 +84,53 @@ if start_download:
 	driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 	driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", 
 	{"source": """Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"""})
+	
+	base_url = "https://www.shufazidian.com/s.php"
+	
+	for word in search_words:
+		st.write(f"🔍 處理字：{word}")
+		save_dir = os.path.join(save_base_dir, f"{word}_{style_display}")
+		os.makedirs(save_dir, exist_ok=True)
 
-    base_url = "https://www.shufazidian.com/s.php"
+		driver.get(base_url)
+		time.sleep(random.uniform(1, 2))
 
-    for word in search_words:
-        st.write(f"🔍 處理字：{word}")
-        save_dir = os.path.join(save_base_dir, f"{word}_{style_display}")
-        os.makedirs(save_dir, exist_ok=True)
+		search_input = driver.find_element(By.ID, "wd")
+		search_input.clear()
+		search_input.send_keys(word)
 
-        driver.get(base_url)
-        time.sleep(random.uniform(1, 2))
+		select = Select(driver.find_element(By.ID, "sort"))
+		select.select_by_value(style_value)
 
-        search_input = driver.find_element(By.ID, "wd")
-        search_input.clear()
-        search_input.send_keys(word)
+		submit_button = driver.find_element(By.XPATH, "//form[@name='form1']//button[@type='submit']")
+		submit_button.click()
+		time.sleep(random.uniform(2, 3))
 
-        select = Select(driver.find_element(By.ID, "sort"))
-        select.select_by_value(style_value)
+		img_elements = driver.find_elements(By.CSS_SELECTOR, ".woo-pcont.woo-masned.my-pic img")
+		if not img_elements:
+			st.warning(f"❌ 找不到字 {word} 的圖片")
+			continue
 
-        submit_button = driver.find_element(By.XPATH, "//form[@name='form1']//button[@type='submit']")
-        submit_button.click()
-        time.sleep(random.uniform(2, 3))
+		for idx, img_elem in enumerate(img_elements[1:]):
+		if idx >= download_limit:
+			break
+		src = img_elem.get_attribute("src")
+		if not src:
+			continue
+		img_url = urljoin(base_url, src)
+		try:
+			img_data = requests.get(img_url, headers=headers, timeout=10).content
+			img_name = os.path.join(save_dir, f"{word}_{idx + 1}.jpg")
+			with open(img_name, "wb") as f:
+				f.write(img_data)
+			time.sleep(random.uniform(1, 3))
+		except Exception as e:
+			error_list.append((word, img_url, str(e)))
 
-        img_elements = driver.find_elements(By.CSS_SELECTOR, ".woo-pcont.woo-masned.my-pic img")
-        if not img_elements:
-            st.warning(f"❌ 找不到字 {word} 的圖片")
-            continue
+		driver.quit()
 
-        for idx, img_elem in enumerate(img_elements[1:]):
-            if idx >= download_limit:
-                break
-            src = img_elem.get_attribute("src")
-            if not src:
-                continue
-            img_url = urljoin(base_url, src)
-            try:
-                img_data = requests.get(img_url, headers=headers, timeout=10).content
-                img_name = os.path.join(save_dir, f"{word}_{idx + 1}.jpg")
-                with open(img_name, "wb") as f:
-                    f.write(img_data)
-                time.sleep(random.uniform(1, 3))
-            except Exception as e:
-                error_list.append((word, img_url, str(e)))
-
-    driver.quit()
-
-    st.success("✅ 所有字處理完畢！")
-    if error_list:
-        st.error("⚠️ 以下圖片下載失敗：")
-        for word, url, msg in error_list:
-            st.write(f"{word}: {url}")
+		st.success("✅ 所有字處理完畢！")
+		if error_list:
+			st.error("⚠️ 以下圖片下載失敗：")
+		for word, url, msg in error_list:
+			st.write(f"{word}: {url}")
