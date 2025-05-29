@@ -14,6 +14,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import requests
 import streamlit as st
+import re
 
 # ===== Streamlit UI =====
 st.set_page_config(page_title="書法字下載器", layout="centered")
