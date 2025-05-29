@@ -64,9 +64,8 @@ if start_download:
 		'User-Agent': user_agent
 	}
 	options.add_argument(f"user-agent={user_agent}")
-
-    # 設定瀏覽器
-    options = Options()
+	
+	options = Options()
 	options.add_argument("--disable-gpu")
 	options.add_argument("--no-sandbox")
 	options.add_argument("--headless")
