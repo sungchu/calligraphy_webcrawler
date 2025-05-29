@@ -1,7 +1,4 @@
-numpy
-Pillow
-fake-useragent
-selenium
-webdriver-manager
-requests
 streamlit
+selenium==4.10.0
+requests
+pillow
