@@ -53,16 +53,8 @@ if start_download:
 	os.makedirs(save_base_dir, exist_ok=True)
 	st.write("🚀 開始下載...")
 	error_list = []
-	
-	try:
-		ua = UserAgent()
-		user_agent = ua.chrome
-	except:
-		user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
-	headers = {
-		'User-Agent': user_agent
-	}
+	user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 	
 	
 	options = Options()
