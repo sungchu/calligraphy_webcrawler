@@ -112,20 +112,20 @@ if start_download:
 			continue
 
 		for idx, img_elem in enumerate(img_elements[1:]):
-		if idx >= download_limit:
-			break
-		src = img_elem.get_attribute("src")
-		if not src:
-			continue
-		img_url = urljoin(base_url, src)
-		try:
-			img_data = requests.get(img_url, headers=headers, timeout=10).content
-			img_name = os.path.join(save_dir, f"{word}_{idx + 1}.jpg")
-			with open(img_name, "wb") as f:
-				f.write(img_data)
-			time.sleep(random.uniform(1, 3))
-		except Exception as e:
-			error_list.append((word, img_url, str(e)))
+			if idx >= download_limit:
+				break
+			src = img_elem.get_attribute("src")
+			if not src:
+				continue
+			img_url = urljoin(base_url, src)
+			try:
+				img_data = requests.get(img_url, headers=headers, timeout=10).content
+				img_name = os.path.join(save_dir, f"{word}_{idx + 1}.jpg")
+				with open(img_name, "wb") as f:
+					f.write(img_data)
+				time.sleep(random.uniform(1, 3))
+			except Exception as e:
+				error_list.append((word, img_url, str(e)))
 
 		driver.quit()
 
