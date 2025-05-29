@@ -63,7 +63,7 @@ if start_download:
 	headers = {
 		'User-Agent': user_agent
 	}
-	options.add_argument(f"user-agent={user_agent}")
+	
 	
 	options = Options()
 	options.add_argument("--disable-gpu")
@@ -74,7 +74,7 @@ if start_download:
 	options.add_argument("--disable-extensions")
 	options.add_experimental_option("excludeSwitches", ["enable-automation"])
 	options.add_experimental_option("useAutomationExtension", False)
-	options.add_argument(f"user-agent={headers['User-Agent']}")
+	options.add_argument(f"user-agent={user_agent}")
 
 	from shutil import which
 	chrome_path = which("chromium-browser") or which("chromium")
