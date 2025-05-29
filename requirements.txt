@@ -1,0 +1,7 @@
+numpy
+Pillow
+fake-useragent
+selenium
+webdriver-manager
+requests
+streamlit
