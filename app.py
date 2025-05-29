@@ -50,9 +50,9 @@ start_download = st.button("開始下載")
 
 # ===== 主程式邏輯 =====
 if start_download:
-    os.makedirs(save_base_dir, exist_ok=True)
-    st.write("🚀 開始下載...")
-    error_list = []
+	os.makedirs(save_base_dir, exist_ok=True)
+	st.write("🚀 開始下載...")
+	error_list = []
 	
 	try:
 		ua = UserAgent()
